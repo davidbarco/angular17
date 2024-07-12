@@ -1,13 +1,13 @@
 <div class="cardFor">
 
-  @for (card of tarjetasData; track card.id) {
+  @for (card of pokemones; track card.index) {
     <mat-card class="example-card custom-border" appearance="outlined">
       <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>{{card.titulo}}</mat-card-title>
-        <mat-card-subtitle>{{card.subtitulo}}</mat-card-subtitle>
+        <div mat-card-avatar class="example-header-image" [ngStyle]="{ 'background-image': 'url(' + card.imageUrl + ')'}"></div>
+        <mat-card-title>{{card.name}}</mat-card-title>
+        <mat-card-subtitle>{{card.name}}</mat-card-subtitle>
       </mat-card-header>
-      <img class="padd" mat-card-image [src]="card.imagenUrl" alt="Photo of a Shiba Inu">
+      <img class="" mat-card-image [src]="card.imageUrl" alt="Photo of a Shiba Inu">
       <mat-card-content>
         <p>
           The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.

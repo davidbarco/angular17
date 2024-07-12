@@ -2,15 +2,51 @@ import { Component } from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card'
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule para el ngStyle.
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [MatSelectModule, MatCardModule, MatFormFieldModule],
+  imports: [MatSelectModule, MatCardModule, MatFormFieldModule, CommonModule],
   templateUrl: './card.component.html',
   styleUrl: './card.component.css'
 })
-export class CardComponent {
+export class CardComponent{
+
+  constructor(private http: HttpClient) {}
+
+  urlPokemon: string = 'https://pokeapi.co/api/v2/pokemon';
+  pokemones!: any
+
+  ngOnInit(): void {
+    this.http.get<any>(this.urlPokemon).subscribe((response) => {
+      this.pokemones = response.results.map((pokemon:any, index:any) => {
+        return {
+          index: index + 1,
+          name: pokemon.name,
+          url: pokemon.url,
+          imageUrl: '' // Aquí almacenaremos la URL de la imagen del Pokémon
+        };
+      });
+
+      // Llamar a la función para obtener las imágenes de los Pokémon
+      this.obtenerImagenesPokemon();
+    });
+  }
+
+  obtenerImagenesPokemon(): void {
+    // Iterar sobre this.pokemones para obtener la imagen de cada Pokémon
+    this.pokemones.forEach((pokemon:any) => {
+      this.http.get<any>(pokemon.url).subscribe((pokemonData) => {
+        // Obtener la URL de la imagen del primer sprite (front_default)
+        pokemon.imageUrl = pokemonData.sprites.front_default;
+      });
+    });
+    console.log(this.pokemones)
+  }
+
+
   // Definición de datos para las tarjetas
 tarjetasData = [
   {
